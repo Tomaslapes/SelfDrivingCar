@@ -1,7 +1,7 @@
 import socket
 
 # Server Address
-IP = socket.gethostbyname(socket.gethostname())
+IP = "192.168.15.15"#socket.gethostbyname(socket.getfqdn())
 PORT = 5420
 ADDR = (IP, PORT)
 
