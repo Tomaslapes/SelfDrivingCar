@@ -34,14 +34,14 @@ def send_camera_feed():
         padded_msg = bytes(
             f"{len(encoded_image):<{HEADER}}", "utf-8") + encoded_image
         print(len(padded_msg))
-        client_socket.send(padded_msg)
+        #client_socket.send(padded_msg)
 
 
 while SERVER_ONLINE:
     client_socket, client_addr = server_socket.accept()
     print(f"[INFO] New connection from address {client_addr} established!")
     while client_socket:
-        camera_thread = threading.Thread(target=send_camera_feed, deamon=True)
+        camera_thread = threading.Thread(target=send_camera_feed, daemon=True)
         try:
             message_init = client_socket.recv(HEADER)
             msg_length = int(message_init)
@@ -58,4 +58,5 @@ while SERVER_ONLINE:
     break
 
 server_socket.close()
+cam.release()
 print("Server shutdown!")
