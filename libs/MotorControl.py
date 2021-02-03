@@ -3,9 +3,10 @@ from Jetson.GPIO.gpio import PWM
 import RPi.GPIO as GPIO
 import time
 
+
 class Motor:
     """The Motor class simplifies the control of a single motor.
-    
+
     To initialize provide pin1 and pin2 for the Motor connections.
     Methods:
         turn_on -> to turn on the motor and spin it in a provided direction.
@@ -13,9 +14,9 @@ class Motor:
         destroy -> cleans up the GPIO pins.
     """
 
-    def __init__(self, pin_a, pin_b,pwm_pin = None,speed_control = False,pwm_freq = 2000):
+    def __init__(self, pin_a, pin_b, pwm_pin=None, speed_control=False, pwm_freq=2000):
         """Initialize the motor pins and set them as outputs
-        
+
         set speed_control to True to be able to modify motor speed
         (when this is enabled a pwm_pin needs to be also provided)
         a default frequency of 2000 is used.
@@ -34,24 +35,26 @@ class Motor:
 
         # Setup the pins as outputs
         GPIO.setmode(GPIO.BOARD)
-        GPIO.setup(self.pin_a, GPIO.OUT, initial= GPIO.LOW)
-        GPIO.setup(self.pin_b, GPIO.OUT, initial= GPIO.LOW)
+        GPIO.setup(self.pin_a, GPIO.OUT, initial=GPIO.LOW)
+        GPIO.setup(self.pin_b, GPIO.OUT, initial=GPIO.LOW)
         if self.speed_control == True:
-            GPIO.setup(self.pwm_pin, GPIO.OUT, initial= GPIO.LOW)
-            self.pwm = GPIO.PWM(self.pwm_pin,pwm_freq)
-            self.pwm.start(100) # the pwm is reversed in this case thus 100 will mean the motor is off
+            GPIO.setup(self.pwm_pin, GPIO.OUT, initial=GPIO.LOW)
+            self.pwm = GPIO.PWM(self.pwm_pin, pwm_freq)
+            # the pwm is reversed in this case thus 100 will mean the motor is off
+            self.pwm.start(100)
         print(f"Motor({self.pin_a},{self.pin_b}) initialized succesfully!")
 
-    # Direction is "cv" or "ccv" or a int 1 or -1 
-    def turn_on(self,direction,speed = 100):
+    # Direction is "cv" or "ccv" or a int 1 or -1
+    def turn_on(self, direction, speed=100):
         """Direction-> is "cv" or "ccv" or a int 1 or -1. 
         Speed-> is a int value from 0(off) up to 100(full speed).
-        
+
         Turns the motor ON spinning in the set direction. 
         THIS TOGGLES THE MOTOR ON AND IT HAS TO BE TURNED OFF MANUALLY! 
         """
-        self.speed = (speed*-1)+100 # inverts the speed because of how the pwm is wired 
-        if isinstance(direction,str):# Checks if direction is a string
+        self.speed = (speed*-1) + \
+            100  # inverts the speed because of how the pwm is wired
+        if isinstance(direction, str):  # Checks if direction is a string
             print(direction)
             if direction == "cv":
                 self.direction = 1
@@ -61,24 +64,25 @@ class Motor:
             self.direction = direction
 
         if self.direction == 1:
-            GPIO.output(self.pin_a,GPIO.LOW)
-            GPIO.output(self.pin_b,GPIO.HIGH)
-            if self.speed_control: # only set the speed if speed control is used
+            GPIO.output(self.pin_a, GPIO.LOW)
+            GPIO.output(self.pin_b, GPIO.HIGH)
+            if self.speed_control:  # only set the speed if speed control is used
                 self.pwm.ChangeDutyCycle(self.speed)
         else:
-            GPIO.output(self.pin_a,GPIO.HIGH)
-            GPIO.output(self.pin_b,GPIO.LOW)
-            if self.speed_control: # only set the speed if speed control is used
+            GPIO.output(self.pin_a, GPIO.HIGH)
+            GPIO.output(self.pin_b, GPIO.LOW)
+            if self.speed_control:  # only set the speed if speed control is used
                 self.pwm.ChangeDutyCycle(self.speed)
 
-        print(f"Motor({self.pin_a},{self.pin_b}) on | dir={self.direction} | speed={speed}")
+        print(
+            f"Motor({self.pin_a},{self.pin_b}) on | dir={self.direction} | speed={speed}")
 
     def motor_stop(self):
         """Stops the motor."""
 
         GPIO.output(self.pin_a, GPIO.LOW)
         GPIO.output(self.pin_b, GPIO.LOW)
-        if self.speed_control: # only set the motor speed to 0 if speed control is used
+        if self.speed_control:  # only set the motor speed to 0 if speed control is used
             self.pwm.ChangeDutyCycle(0)
 
         print(f"Motor({self.pin_a},{self.pin_b}) off")
@@ -92,7 +96,7 @@ class Motor:
             GPIO.cleanup(self.pin_b)
             GPIO.cleanup(self.pwm_pin)
             print("Motor destroyed -> pins released")
-        except e:
+        except Exception as e:
             print(e)
 
     def __del__(self):
@@ -119,4 +123,3 @@ class Motor:
 # time.sleep(1)
 # testMotor.destroy()
 # testMotor2.destroy()
-

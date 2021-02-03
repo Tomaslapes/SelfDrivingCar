@@ -49,21 +49,17 @@ class CameraView(Sprite):
             #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imwrite('image.jpg', frame)
             return
-        print("Frame is false")
+        print("No camera data")
         return
 
     def recieve_data(self):
         global HEADER
         try:
             message_init = contr_socket.recv(HEADER)
-            print(message_init)
             message_len = int(message_init.decode("utf-8"))
-            print("hello")
-            print(message_len)
 
             message = contr_socket.recv(message_len)
             image = pickle.loads(message)
-            print("\n", image)
             return image
         except Exception as e:
             print(e)

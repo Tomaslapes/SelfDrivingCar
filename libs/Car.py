@@ -13,6 +13,8 @@ class Car():
         self.STEER = 0.0
 
     def update_car(self, steer, speed):
+        self.SPEED = speed
+        self.STEER = steer
         self.steer.steer(steer)
 
         if speed == 0:
