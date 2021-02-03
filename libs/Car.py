@@ -23,6 +23,7 @@ class Car():
             return
         dir = 1
         if speed < 0:
+            self.SPEED = speed * -1
             dir = -1
         self.motor_1.turn_on(dir, speed=self.SPEED)
         self.motor_2.turn_on(dir, speed=self.SPEED)
