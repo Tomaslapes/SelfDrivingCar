@@ -1,6 +1,7 @@
 import socket
 from ursina import Ursina, Button, color, Text, window, held_keys, Texture, Sprite, Slider, ThinSlider, Entity
 from time import sleep
+import pickle
 import cv2
 
 # Server Address
@@ -13,10 +14,6 @@ HEADER = 10
 STEER_SPEED = 0.1
 ACCEL = 1
 CONNECTED = False
-
-# Camera setup
-cap = cv2.VideoCapture(0)
-
 
 app = Ursina()
 window.title = "Car controller"
@@ -39,16 +36,38 @@ class GeneralButton(Button):
 
 class CameraView(Sprite):
     def __init__(self):
-        super().__init__(texture="image.jpg", origin=(0, -0.25))
+        super().__init__(texture="image.jpg", origin=(0, -0.25), scale=3.0)
 
-    def update(self):
-        self.get_camera_image()
-        self.texture = "image.jpg"
-        self.texture.apply()
+    def update(self):  # this method gets called automaticaly by ursina
+        self.get_camera_image()  # get the camera image
+        self.texture = "image.jpg"  # load the image
+        self.texture.apply()  # apply it to the texture to refresh it (wont show othervise)
 
     def get_camera_image(self):
-        ret, frame = cap.read()
-        cv2.imwrite('image.jpg', frame)
+        frame = self.recieve_data()
+        if type(frame) != type(None):
+
+            cv2.imwrite('image.jpg', frame)
+            return
+        print("Frame is false")
+        return
+
+    def recieve_data(self):
+        global HEADER
+        try:
+            message_init = contr_socket.recv(HEADER)
+            print(message_init)
+            message_len = int(message_init.decode("utf-8"))
+            print("hello")
+            print(message_len)
+
+            message = contr_socket.recv(message_len)
+            image = pickle.loads(message)
+            print("\n", image)
+            return image
+        except Exception as e:
+            print(e)
+            return None
 
 
 def connect():
@@ -70,18 +89,12 @@ def send(msg):
     contr_socket.send(padded_msg.encode("utf-8"))
 
 
-def quit():
-    print("quit")
-
-
 steer_value = 0.0
 car_speed = 0
 
 
 def update():
-    global steer_value, car_speed, camera_view
-
-    # camera_view.update()
+    global steer_value, car_speed
 
     if held_keys['a']:
         print(f"Steer LEFT: {steer_value}")
