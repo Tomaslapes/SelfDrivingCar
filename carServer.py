@@ -35,7 +35,8 @@ def send_camera_feed(cam,HEADER,client_socket):
     ret, frame = cam.read()
     if type(frame) == type(None):
         frame = None#np.zeros((10,10))
-    img = cv2.resize(frame,(50,50))
+    img = cv2.resize(frame,(100,100))
+    img = cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
 
     encoded_image = pickle.dumps(img)
     prefix =bytes(f"{len(encoded_image):<{HEADER}}", "utf-8")
