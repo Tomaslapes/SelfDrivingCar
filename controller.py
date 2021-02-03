@@ -36,7 +36,7 @@ class GeneralButton(Button):
 
 class CameraView(Sprite):
     def __init__(self):
-        super().__init__(texture="image.jpg", origin=(0, -0.25), scale=3.0)
+        super().__init__(texture="image.jpg", origin=(0, -0.25), scale=3.5)
 
     def update(self):  # this method gets called automaticaly by ursina
         self.get_camera_image()  # get the camera image
@@ -46,7 +46,7 @@ class CameraView(Sprite):
     def get_camera_image(self):
         frame = self.recieve_data()
         if type(frame) != type(None):
-
+            #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imwrite('image.jpg', frame)
             return
         print("Frame is false")
