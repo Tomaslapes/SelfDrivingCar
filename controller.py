@@ -110,7 +110,7 @@ def update():
             car_speed += ACCEL
     if held_keys['s']:
         print(f"Move BACKWARDS: {car_speed}")
-        if car_speed > 0:
+        if car_speed > -100:
             car_speed -= ACCEL
     if held_keys["space"]:
         print("STOP!")
