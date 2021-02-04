@@ -1,5 +1,5 @@
+from ursina import Ursina, Button, color, Text, window, held_keys, Sprite, Slider, Texture
 import socket
-from ursina import Ursina, Button, color, Text, window, held_keys, Sprite, Slider
 from time import sleep
 import pickle
 import cv2
