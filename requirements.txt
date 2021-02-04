@@ -1,0 +1,8 @@
+numpy==1.20.0
+opencv-python==4.5.1.48
+panda3d==1.10.8
+pickles==0.1.1
+Pillow==8.1.0
+pyperclip==1.8.1
+screeninfo==0.6.7
+ursina==3.3.1
