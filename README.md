@@ -1,6 +1,6 @@
 # SelfDrivingCar
-Hi, thanks for checking out my repo. 
-This project is focused on building a self-driving car from scratch.
+Hi, thanks for checking out my repo.
+This project is focused on building a self-driving car from scratch.  I am a high-school student who loves electronics, python and 3D printing.
 
 Goals:
  - ✅Desing (CAD, electronics)
