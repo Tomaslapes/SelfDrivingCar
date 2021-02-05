@@ -11,7 +11,7 @@ ADDR = (IP, PORT)
 
 # Communication settings
 HEADER = 10
-STEER_SPEED = 0.1
+STEER_SPEED = 0.05
 ACCEL = 1
 CONNECTED = False
 
@@ -80,7 +80,7 @@ def encode_msg(speed, steer):
 
 
 def send(msg):
-    print(msg)
+    # print(msg)
     padded_msg = f"{len(msg):<{HEADER}}" + msg
     contr_socket.send(padded_msg.encode("utf-8"))
 
@@ -93,24 +93,26 @@ def update():
     global steer_value, car_speed
 
     if held_keys['a']:
-        print(f"Steer LEFT: {steer_value}")
-        if steer_value > -1.0:
+        #print(f"Steer LEFT: {steer_value}")
+        if steer_value > 0.0:
             steer_value -= STEER_SPEED
     if held_keys['d']:
-        print(f"Steer RIGHT: {steer_value}")
+        #print(f"Steer RIGHT: {steer_value}")
         if steer_value < 1.0:
             steer_value += STEER_SPEED
     if held_keys['w']:
-        print(f"Move FORWARD: {car_speed}")
+        #print(f"Move FORWARD: {car_speed}")
         if car_speed < 100:
             car_speed += ACCEL
     if held_keys['s']:
-        print(f"Move BACKWARDS: {car_speed}")
+        #print(f"Move BACKWARDS: {car_speed}")
         if car_speed > -100:
             car_speed -= ACCEL
     if held_keys["space"]:
-        print("STOP!")
+        # print("STOP!")
         car_speed = 0
+    if held_keys["x"]:
+        steer_value = 0.5
 
     Steer_Slider.value = steer_value
     Speed_Slider.value = car_speed
@@ -118,13 +120,13 @@ def update():
     if CONNECTED:
         send(encode_msg(car_speed, steer_value))
 
-    sleep(0.1)
+    sleep(0.025)
 
 
 contr_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 connect_button = GeneralButton("Connect", connect)
 help_text = Text(
-    "Use W and S to move forward or backwards.\n Use A and D to steer.\n Press [SPACE] to stop immediately", origin=(0, 4))
+    "Use W and S to move forward or backwards.\n Use A and D to steer.\n Press [SPACE] to stop immediately and X to center the steering.", origin=(0, 4))
 
 # Camera setup
 camera_view = CameraView()
@@ -138,7 +140,7 @@ def set_steer():
     steer_value = Steer_Slider.value
 
 
-Steer_Slider = Slider(min=-1.0, max=1.0, default=0.0, height=0.05, y=-0.1, x=-0.25,
+Steer_Slider = Slider(min=-0.0, max=1.0, default=0.0, height=0.05, y=-0.1, x=-0.25,
                       label=Text(origin=(0, 4), text="Steer value"), on_value_changed=set_steer)
 
 Speed_Slider = Slider(min=-100, max=100, default=0.0, height=0.05, y=-0.2, x=-0.25,
