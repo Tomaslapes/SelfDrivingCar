@@ -1,5 +1,7 @@
+from typing import ByteString
 from Jetson.GPIO.gpio import PWM
 import RPi.GPIO as GPIO
+import time
 
 
 class Motor:
