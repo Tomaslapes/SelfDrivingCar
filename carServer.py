@@ -32,19 +32,19 @@ print(f"[STATUS] Server is listening to incoming connections!")
 
 def send_camera_feed(cam, HEADER, client_socket):
     print("Send camera data")
-    # while True:
-    ret, frame = cam.read()
-    if type(frame) == type(None):
-        frame = None  # np.zeros((10,10))
-    img = cv2.resize(frame, (25, 25))
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    while True:
+        ret, frame = cam.read()
+        if type(frame) == type(None):
+            frame = None  # np.zeros((10,10))
+        img = cv2.resize(frame, (30, 30))
+        img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-    encoded_image = pickle.dumps(img)
-    prefix = bytes(f"{len(encoded_image):<{HEADER}}", "utf-8")
-    padded_msg = prefix + encoded_image
-    print("Image size: ", len(padded_msg))
-    client_socket.send(padded_msg)
-    print("send")
+        encoded_image = pickle.dumps(img) + b"\\nx0a"
+        prefix = bytes(f"{len(encoded_image):<{HEADER}}", "utf-8")
+        padded_msg = prefix + encoded_image
+        #print("Image size: ", len(padded_msg))
+        client_socket.send(padded_msg)
+        #print("send")
 
 
 SERVER_ONLINE = True
@@ -65,7 +65,7 @@ while SERVER_ONLINE:
             CAR_SPEED = int(commands[0])
             CAR_STEER = float(commands[1])
             CAR.update_car(CAR_STEER, CAR_SPEED)
-            print(message)
+            #print(message)
 
             #send_camera_feed(cam, HEADER, client_socket)
 
