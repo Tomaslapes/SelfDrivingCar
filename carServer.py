@@ -2,6 +2,7 @@ import socket
 import cv2
 import pickle
 from time import sleep
+import threading
 # Import custom libraries
 from libs import Car
 
@@ -51,8 +52,8 @@ SERVER_ONLINE = True
 while SERVER_ONLINE:
     client_socket, client_addr = server_socket.accept()
     print(f"[INFO] New connection from address {client_addr} established!")
-    #camera_thread = threading.Thread(target=send_camera_feed,args=[cam,HEADER,client_socket], daemon=False)
-    # camera_thread.start()
+    camera_thread = threading.Thread(target=send_camera_feed,args=[cam,HEADER,client_socket], daemon=True)
+    camera_thread.start()
     while client_socket:
         try:
             message_init = client_socket.recv(HEADER)
@@ -66,7 +67,7 @@ while SERVER_ONLINE:
             CAR.update_car(CAR_STEER, CAR_SPEED)
             print(message)
 
-            send_camera_feed(cam, HEADER, client_socket)
+            #send_camera_feed(cam, HEADER, client_socket)
 
         except Exception as e:
             print(e)
