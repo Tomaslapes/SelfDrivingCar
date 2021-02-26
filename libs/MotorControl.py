@@ -92,6 +92,7 @@ class Motor:
             self.motor_stop()
             GPIO.cleanup(self.pin_a)
             GPIO.cleanup(self.pin_b)
+            self.pwm.Stop()
             GPIO.cleanup(self.pwm_pin)
             print("Motor destroyed -> pins released")
         except Exception as e:

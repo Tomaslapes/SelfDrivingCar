@@ -13,6 +13,7 @@ ADDR = (IP, PORT)
 HEADER = 10
 STEER_SPEED = 0.05
 ACCEL = 1
+SPEED_THR = 50  # Speed threashold for low value compensation
 CONNECTED = False
 
 app = Ursina()
@@ -103,10 +104,14 @@ def update():
     if held_keys['w']:
         #print(f"Move FORWARD: {car_speed}")
         if car_speed < 100:
+            if (car_speed + ACCEL) > 0 and car_speed < SPEED_THR:
+                car_speed = SPEED_THR
             car_speed += ACCEL
     if held_keys['s']:
         #print(f"Move BACKWARDS: {car_speed}")
         if car_speed > -100:
+            if (car_speed - ACCEL) < 0 and car_speed > -SPEED_THR:
+                car_speed = -SPEED_THR
             car_speed -= ACCEL
     if held_keys["space"]:
         # print("STOP!")
