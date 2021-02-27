@@ -15,12 +15,8 @@ LOWER_LIMIT = 170
 UPPER_LIMIT = 255
 
 # Navigation settings
-CONTROL_POINTS = [
-    0.1, 0.15, 0.2,
-    0.25, 0.3, 0.45,
-    0.6, 0.75, 0.90
-]
-SMOOTH_DIST = 20
+CONTROL_POINT = 0.45
+SMOOTH_DIST = 10
 
 DRIVING = True
 
@@ -33,9 +29,11 @@ while DRIVING:
         gray_scale, LOWER_LIMIT, UPPER_LIMIT, cv2.THRESH_BINARY)
 
     locations = []
-    for y, row in enumerate(threshold_image):
+    img_slice = threshold_image[(int(frame.shape[0]*CONTROL_POINT) -
+                                 SMOOTH_DIST):(int(frame.shape[0]*CONTROL_POINT)+SMOOTH_DIST)]
+    for y, row in enumerate(img_slice):
 
-        indices = [int(threshold_image.shape[1]/2)]
+        indices = [int(img_slice.shape[1]/2)]
         for x, value in enumerate(row):
             if value == 255:
                 indices.append(x)
@@ -44,24 +42,28 @@ while DRIVING:
 
         # TODO DEBUG - remove later
         frame = cv2.circle(
-            frame, (indices[int(len(indices)/2)], y), radius=2, color=(15, 15, 230), thickness=-1)
+            frame, (indices[int(len(indices)/2)], y + int(frame.shape[0]*CONTROL_POINT)), radius=2, color=(15, 15, 230), thickness=-1)
         # DEBUG - remove later
 
     # ********** Point calculations ********** #
     control_points_list = []
-    for control_point in CONTROL_POINTS:
-        point_index = int(len(locations)*control_point)
-        smoothing_window = locations[point_index -
-                                     SMOOTH_DIST:point_index+SMOOTH_DIST]
-        _sum = int(sum(smoothing_window)/len(smoothing_window))
-        control_points_list.append((_sum, point_index))
-        frame = cv2.circle(
-            frame, (_sum, point_index), radius=8, color=(65, 230, 15), thickness=-1)
+    point_index = int(len(locations)/2)
+    smoothing_window = locations[point_index -
+                                 SMOOTH_DIST:point_index+SMOOTH_DIST]
+
+    _sum = int(sum(smoothing_window)/len(smoothing_window))
+    control_points_list.append((_sum, point_index))
+
+    # TODO DEBUG - remove later
+    frame = cv2.circle(
+        frame, (_sum, point_index+int(frame.shape[0]*CONTROL_POINT)), radius=8, color=(65, 230, 15), thickness=-1)
+    # DEBUG - remove later
+
     # TODO DEBUG - remove later
     frame = cv2.line(
         frame, (int(frame.shape[1]/2), 0), (int(frame.shape[1]/2), frame.shape[0]), color=(255, 0, 0), thickness=2)
     frame = cv2.line(
-        frame, (int(frame.shape[1]/2), control_points_list[5][1]), control_points_list[5], color=(255, 0, 0), thickness=2)
+        frame, (int(frame.shape[1]/2), control_points_list[0][1]), control_points_list[0], color=(255, 0, 0), thickness=2)
     # DEBUG - remove later
 
     point_distance = control_points_list[5][0]-int(frame.shape[1]/2)
