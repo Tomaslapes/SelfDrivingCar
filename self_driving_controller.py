@@ -5,7 +5,7 @@ import cv2
 CAR = Car.Car((32), (11, 13, 33, True), (31, 29, 33, True))
 
 # Camera setup
-camera = cv2.VideoCapture(0)
+camera = cv2.VideoCapture(0, cv2.CAP_V4L)
 # Camera exposure settings
 camera.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
 camera.set(cv2.CAP_PROP_EXPOSURE, -3.5)
