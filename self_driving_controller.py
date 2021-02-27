@@ -8,10 +8,10 @@ CAR = Car.Car((32), (11, 13, 33, True), (31, 29, 33, True))
 camera = cv2.VideoCapture(0, cv2.CAP_V4L)
 # Camera exposure settings
 camera.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
-camera.set(cv2.CAP_PROP_EXPOSURE, -3.5)
+camera.set(cv2.CAP_PROP_EXPOSURE, 0)
 
 # Threshold settings
-LOWER_LIMIT = 170
+LOWER_LIMIT = 150
 UPPER_LIMIT = 255
 
 # Navigation settings
@@ -66,7 +66,7 @@ while DRIVING:
         frame, (int(frame.shape[1]/2), control_points_list[0][1]), control_points_list[0], color=(255, 0, 0), thickness=2)
     # DEBUG - remove later
 
-    point_distance = control_points_list[5][0]-int(frame.shape[1]/2)
+    point_distance = control_points_list[0][0]-int(frame.shape[1]/2)
 
     _steer_max = int(frame.shape[1]/2)
     steer_value = ((point_distance / _steer_max) / 2)+0.5
@@ -77,7 +77,7 @@ while DRIVING:
     cv2.imshow('video bw', threshold_image)
     cv2.imshow('video original', frame)
 
-    CAR.update_car(steer_value, 0)
+    CAR.update_car(steer_value, 85)
 
     if cv2.waitKey(1) == 27:
         break
