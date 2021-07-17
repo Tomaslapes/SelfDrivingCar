@@ -23,11 +23,11 @@ class MyController(Controller):
         CAR.update_car(CAR_STEER, int(CAR_SPEED))
 
     def on_L3_left(self, value):
-        CAR_STEER = (int(value)/MAX_VALUE)*-1
+        CAR_STEER = (int(value)/(MAX_VALUE*2))*-1 -0.5
         CAR.update_car(float(CAR_STEER),CAR_SPEED )
 
     def on_L3_right(self, value):
-        CAR_STEER = (int(value)/MAX_VALUE)*-1
+        CAR_STEER = (int(value)/(MAX_VALUE*2))*-1 -0.5
         CAR.update_car(float(CAR_STEER),CAR_SPEED)
 
 PS4_CONTROLLER = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
