@@ -15,20 +15,24 @@ class MyController(Controller):
         Controller.__init__(self, **kwargs)
 
     def on_L3_up(self,value):
+        global CAR_STEER, CAR_SPEED
         CAR_SPEED = (int(value)/MAX_VALUE)*-100
-        CAR.update_car(CAR_STEER, int(CAR_SPEED))
+        CAR.update_car(float(CAR_STEER), int(CAR_SPEED))
 
     def on_L3_down(self,value):
+        global CAR_STEER, CAR_SPEED
         CAR_SPEED = (int(value)/MAX_VALUE)*-100
-        CAR.update_car(CAR_STEER, int(CAR_SPEED))
+        CAR.update_car(float(CAR_STEER), int(CAR_SPEED))
 
-    def on_L3_left(self, value):
-        CAR_STEER = (int(value)/(MAX_VALUE*2))*-1 -0.5
+    def on_L2_press(self, value):
+        CAR_STEER = -1*((int(value)/(MAX_VALUE*2))-0.5)
+        print(CAR_STEER)
         CAR.update_car(float(CAR_STEER),CAR_SPEED )
 
-    def on_L3_right(self, value):
-        CAR_STEER = (int(value)/(MAX_VALUE*2))*-1 -0.5
-        CAR.update_car(float(CAR_STEER),CAR_SPEED)
+    #def on_L3_right(self, value):
+    #    CAR_STEER = -1*((int(value)/(MAX_VALUE*2)) -0.5)
+    #    print(CAR_STEER)
+    #    CAR.update_car(float(CAR_STEER),CAR_SPEED)
 
 PS4_CONTROLLER = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
 PS4_CONTROLLER.listen(timeout=100)
