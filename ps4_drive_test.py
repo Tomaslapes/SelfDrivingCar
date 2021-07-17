@@ -7,7 +7,7 @@ CAR = Car.Car((32), (11, 13, 33, True), (31, 29, 33, True))
 CAR_SPEED = 0
 CAR_STEER = 0.0
 # Controller setup
-MAX_VALUE = 3700
+MAX_VALUE = 32767
 
 class MyController(Controller):
 
