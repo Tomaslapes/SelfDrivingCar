@@ -95,9 +95,10 @@ def connect():
 
 
 def connect_controller():
-    if PS4_CONTROLLER != None:
-        controller = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
-        controller.listen()
+    global PS4_CONTROLLER
+    if PS4_CONTROLLER == None:
+        PS4_CONTROLLER = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+        PS4_CONTROLLER.listen()
         print("connect controller")
 
 
