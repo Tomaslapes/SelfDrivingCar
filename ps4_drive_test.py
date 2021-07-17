@@ -26,7 +26,7 @@ class MyController(Controller):
 
     def on_L2_press(self, value):
         global CAR_STEER, CAR_SPEED
-        CAR_STEER = ((int(value)/(MAX_VALUE*2))-0.5)
+        CAR_STEER = -1*((int(value)*-1/(MAX_VALUE*2))-0.5)
         print(CAR_STEER)
         CAR.update_car(float(CAR_STEER),CAR_SPEED )
 
