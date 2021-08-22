@@ -3,6 +3,12 @@ from ursina import Ursina, Button, color, Text, window, held_keys, Sprite, Slide
 from time import sleep
 import pickle
 import cv2
+from pyPS4Controller.controller import Controller
+
+
+# Controller setup
+PS4_CONTROLLER = None
+
 
 # Server Address
 IP = "192.168.15.15"  # input("IP?: ")
@@ -24,11 +30,11 @@ window.title = "Car controller"
 #print(f"Succesfully connected to server: {ADDR[0]}:{ADDR[1]}!")
 
 class GeneralButton(Button):
-    def __init__(self, text, click_function):
+    def __init__(self, text, click_function, origin = (0,9)):
         super().__init__(model="quad", text=f" {text} ", scale=0.2,)
         self.on_click = click_function
         self.fit_to_text(radius=.2)
-        self.origin = (0, 9)
+        self.origin = origin
 
     def changeState(self, new_text, new_color=color.azure):
         self.color = new_color
@@ -50,7 +56,7 @@ class CameraView(Sprite):
             #frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
             cv2.imwrite('image.jpg', frame)
             return
-        print("No camera data")
+        # print("No camera data")
         return
 
     def recieve_data(self):
@@ -63,8 +69,21 @@ class CameraView(Sprite):
             image = pickle.loads(message)
             return image
         except Exception as e:
-            print(e)
+            # print(e)
             return None
+
+
+
+class MyController(Controller):
+
+    def __init__(self, **kwargs):
+        Controller.__init__(self, **kwargs)
+
+    def on_L3_up(self,value):
+        print("Up: ",value)
+
+    def on_L3_down(self,value):
+        print("Down: ",value)
 
 
 def connect():
@@ -73,6 +92,14 @@ def connect():
     print(f"Successfully connected to server: {ADDR[0]}:{ADDR[1]}!")
     global CONNECTED
     CONNECTED = True
+
+
+def connect_controller():
+    global PS4_CONTROLLER
+    if PS4_CONTROLLER == None:
+        PS4_CONTROLLER = MyController(interface="/dev/input/js0", connecting_using_ds4drv=False)
+        PS4_CONTROLLER.listen()
+        print("connect controller")
 
 
 def encode_msg(speed, steer):
@@ -129,9 +156,11 @@ def update():
 
 
 contr_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-connect_button = GeneralButton("Connect", connect)
+connect_button = GeneralButton("Connect to car", connect)
+connect_controller = GeneralButton("Connect PS4 controller",connect_controller,origin=(0,7.5))
 help_text = Text(
-    "Use W and S to move forward or backwards.\n Use A and D to steer.\n Press [SPACE] to stop immediately and X to center the steering.", origin=(0, 4))
+    "Use W and S to move forward or backwards.\n Use A and D to steer.\n Press [SPACE] to stop immediately and X to center the steering.", 
+    origin=(0, 4))
 
 # Camera setup
 camera_view = CameraView()
