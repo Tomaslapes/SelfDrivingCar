@@ -10,7 +10,7 @@ Goals:
  - ✅Write hardware controllers
  - ✅Make the car remote controlled through PC first
  - ✅Find path and steer the car using thresholding
- - 🚧 [IN PROGGRESS] Create and Neural network to control the car using camera input only
+ - 🚧 [IN PROGGRESS] Create a Conv Neural network to control the car using camera input only. I am still not sure if this end-to-end approach is a going to work well, but going to try it anyway.
  
 Please consider staring! This is an ongoing project I will make everything pretty later ;)
 
