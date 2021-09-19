@@ -36,10 +36,10 @@ class MyController(Controller):
         print(CAR_STEER)
         CAR.update_car(float(CAR_STEER),CAR_SPEED )
 
-    def on_x_press(self):
+    def on_circle_press(self):
         # Save the image and steering angle
         # Generate a random alphanumeric token for the name of the file
-        file_name = join(DATA_DIR,token_hex(n_bytes=16)+".jpg")
+        file_name = join(DATA_DIR,token_hex(nbytes=16)+".jpg")
         # Camera setup
         camera = cv2.VideoCapture(0, cv2.CAP_V4L)
         ret, frame = camera.read()
