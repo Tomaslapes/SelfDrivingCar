@@ -46,6 +46,7 @@ class MyController(Controller):
         sleep(0.1)
         ret, frame = camera.read()
         ret, frame = camera.read()
+        ret, frame = camera.read()
         frame = cv2.resize(frame,(500,500))
         cv2.imwrite(file_name,frame)
         # print([file_name,CAR_STEER])
