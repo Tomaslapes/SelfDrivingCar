@@ -44,9 +44,8 @@ class MyController(Controller):
         # Camera setup
         camera = cv2.VideoCapture(0, cv2.CAP_V4L)
         sleep(0.1)
-        ret, frame = camera.read()
-        ret, frame = camera.read()
-        ret, frame = camera.read()
+        for i in range(10):
+            ret, frame = camera.read()
         frame = cv2.resize(frame,(500,500))
         cv2.imwrite(file_name,frame)
         # print([file_name,CAR_STEER])
