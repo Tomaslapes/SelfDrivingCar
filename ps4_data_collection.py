@@ -4,6 +4,7 @@ from secrets import token_hex
 import cv2
 from os.path import join
 import csv
+from time import sleep
 
 # Car setup
 CAR = Car.Car((32), (11, 13, 33, True), (31, 29, 33, True))
@@ -42,10 +43,12 @@ class MyController(Controller):
         file_name = join(DATA_DIR,token_hex(nbytes=16)+".jpg")
         # Camera setup
         camera = cv2.VideoCapture(0, cv2.CAP_V4L)
+        sleep(0.01)
         ret, frame = camera.read()
         frame = cv2.resize(frame,(500,500))
         cv2.imwrite(file_name,frame)
-        with open("data.csv","a") as f:
+        print([file_name,CAR_STEER])
+        with open("data.csv","w") as f:
             writer = csv.writer(f)
             writer.writerow([file_name,CAR_STEER])
         camera.release()
