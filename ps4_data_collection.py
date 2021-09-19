@@ -43,7 +43,7 @@ class MyController(Controller):
         file_name = join(DATA_DIR,token_hex(nbytes=16)+".jpg")
         # Camera setup
         camera = cv2.VideoCapture(0, cv2.CAP_V4L)
-        sleep(0.01)
+        sleep(0.1)
         ret, frame = camera.read()
         ret, frame = camera.read()
         frame = cv2.resize(frame,(500,500))
