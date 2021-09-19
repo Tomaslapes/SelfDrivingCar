@@ -45,10 +45,11 @@ class MyController(Controller):
         camera = cv2.VideoCapture(0, cv2.CAP_V4L)
         sleep(0.01)
         ret, frame = camera.read()
+        ret, frame = camera.read()
         frame = cv2.resize(frame,(500,500))
         cv2.imwrite(file_name,frame)
-        print([file_name,CAR_STEER])
-        with open("data.csv","w") as f:
+        # print([file_name,CAR_STEER])
+        with open(join(DATA_DIR,"data.csv"),"a") as f:
             writer = csv.writer(f)
             writer.writerow([file_name,CAR_STEER])
         camera.release()
