@@ -44,9 +44,10 @@ while DRIVING:
     input_img = input_img.to(DEVICE)
     input_img = input_img.transpose(0,2).transpose(1,2)
     input_img.unsqueeze_(0)
+    input_img = input_img.float() / 255.0
     console.log(input_img.shape)
 
-    output = model(input_img.float())
+    output = model(input_img)
 
     console.log(output.shape)
     output = torch.reshape(output,(-1,))
