@@ -1,16 +1,20 @@
 from rich.console import Console
 console = Console()
+console.log("[green3]Program starting...")
 
-import torch
-console.log("[green3]Torch loaded")
-from libs import Car
-import cv2
-console.log("[green3]CV2 loaded")
+with console.status("Loading libraries...",spinner="moon"):
+    import torch
+    console.log("[green3]Torch loaded")
+    from libs import Car
+    import cv2
+    console.log("[green3]CV2 loaded")
 
 
 # Model setup
-model = torch.load("./Models/3_0-07Steer 5E 42BS LR0-0001 gpu.pth")
-console.log("[green3]Model loaded successfully!")
+
+with console.status("Started to load the model...",spinner="moon"):
+    model = torch.load("./Models/3_0-07Steer 5E 42BS LR0-0001 gpu.pth")
+    console.log("[green3]Model loaded successfully!")
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Car setup
@@ -40,7 +44,9 @@ while DRIVING:
     input_img = input_img.transpose(0,2).transpose(1,2)
     input_img.unsqueeze_(0)
     console.log(input_img.shape)
-    output = model(input_img)
+
+    output = model(input_img.float())
+
     console.log(output.shape)
     output = torch.reshape(output,(-1,))
     console.log(output.shape)
