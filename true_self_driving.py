@@ -4,6 +4,7 @@ console.log("[green3]Program starting...")
 
 with console.status("Loading libraries...",spinner="moon"):
     import torch
+    from torchvision.transforms import Resize
     console.log("[green3]Torch loaded")
     from libs import Car
     import cv2
@@ -46,7 +47,8 @@ while DRIVING:
     input_img = torch.from_numpy(frame)
     input_img = input_img.to(DEVICE)
     input_img = input_img.transpose(0,2).transpose(1,2)
-    # input_img.unsqueeze_(0)
+    input_img.unsqueeze_(0)
+    input_img = Resize((244,244))(input_img)
     input_img = input_img.float() / 255.0
     console.log("Image is preped. Shape: ",input_img.shape)
 
