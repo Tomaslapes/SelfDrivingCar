@@ -9,7 +9,7 @@ console.log("[green3]CV2 loaded")
 
 
 # Model setup
-model = torch.load("/Models/3_0-07Steer 5E 42BS LR0-0001 gpu.pth")
+model = torch.load("./Models/3_0-07Steer 5E 42BS LR0-0001 gpu.pth")
 console.log("[green3]Model loaded successfully!")
 DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
