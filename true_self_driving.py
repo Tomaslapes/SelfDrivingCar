@@ -28,8 +28,8 @@ camera = cv2.VideoCapture(0, cv2.CAP_V4L)
 # Camera image settings
 camera.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
 camera.set(cv2.CAP_PROP_EXPOSURE, -4)
-camera.set(cv2.CAP_PROP_FRAME_WIDTH,320)
-camera.set(cv2.CAP_PROP_FRAME_HEIGHT,240)
+camera.set(cv2.CAP_PROP_FRAME_WIDTH,224)
+camera.set(cv2.CAP_PROP_FRAME_HEIGHT,224)
 camera.set(cv2.CAP_PROP_BUFFERSIZE,1)
 console.log("[green3]Camera initialized successfully!")
 
@@ -41,6 +41,7 @@ while DRIVING:
     #ret, frame = camera.read()
     ret,frame = camera.retrieve(camera.grab())
     input_img = torch.from_numpy(frame)
+    input_img = input_img.to(DEVICE)
     input_img = input_img.transpose(0,2).transpose(1,2)
     input_img.unsqueeze_(0)
     console.log(input_img.shape)
