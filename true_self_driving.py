@@ -19,7 +19,7 @@ DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 with console.status("Started to load the model...",spinner="moon"):
     model = models.resnet18()
     model.fc = nn.Linear(model.fc.in_features,1)
-    model.load_state_dict("./Models/3_0-07Steer 5E 42BS LR0-0001 gpu_dict.pth")
+    model.load_state_dict(torch.load("./Models/3_0-07Steer 5E 42BS LR0-0001 gpu_dict.pth"))
     model.to(DEVICE)
     model.eval()
     console.log("[green3]Model loaded successfully!")
