@@ -11,11 +11,13 @@ with console.status("Loading libraries...",spinner="moon"):
 
 
 # Model setup
+DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 with console.status("Started to load the model...",spinner="moon"):
     model = torch.load("./Models/3_0-07Steer 5E 42BS LR0-0001 gpu.pth")
+    model = model.to(DEVICE)
+    model.eval()
     console.log("[green3]Model loaded successfully!")
-DEVICE = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 # Car setup
 CAR = Car.Car((32), (11, 13, 33, True), (31, 29, 33, True))
@@ -40,12 +42,13 @@ while DRIVING:
     # ********** IMAGE PROCCESSING ********** #
     #ret, frame = camera.read()
     ret,frame = camera.retrieve(camera.grab())
+    console.log("Retrieved a frame")
     input_img = torch.from_numpy(frame)
     input_img = input_img.to(DEVICE)
     input_img = input_img.transpose(0,2).transpose(1,2)
-    input_img.unsqueeze_(0)
+    # input_img.unsqueeze_(0)
     input_img = input_img.float() / 255.0
-    console.log(input_img.shape)
+    console.log("Image is preped. Shape: ",input_img.shape)
 
     output = model(input_img)
 
