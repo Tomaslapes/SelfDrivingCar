@@ -31,7 +31,7 @@ CAR_STEER = 0.5
 console.log("[green3]CAR initialized successfully!")
 
 # Camera setup
-camera = cv2.VideoCapture(0)#, cv2.CAP_V4L)
+camera = cv2.VideoCapture(0, cv2.CAP_V4L)
 # Camera image settings
 camera.set(cv2.CAP_PROP_AUTO_EXPOSURE, 0.25)
 camera.set(cv2.CAP_PROP_EXPOSURE, -4)
